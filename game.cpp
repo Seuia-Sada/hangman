@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <boost/algorithm/string.hpp>
 #include "game.h"
 
 
@@ -112,8 +111,7 @@ void Game::gameStart(std::string word){
          if(right == true)
         {
             
-        }
-        else
+        }else
         {
             
             tries--;
@@ -122,7 +120,7 @@ void Game::gameStart(std::string word){
         std::cout << "You've won! Congrats!" << std::endl;
         gameOver = true;
     }
-    if (tries == 0)
+    if(tries == 0)
     {
                  std::cout << "\033[2J";
                  std::cout <<"_______________    " << std::endl;
@@ -151,7 +149,6 @@ int Game::yesOrno(std::string question){
     std::cin >> userInput;
     std::cout << std::endl;
 
-    boost::to_lower(userInput);
 
     
     while(userInput != "y" or "yes" || "n" or "no"){
