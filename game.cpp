@@ -1,8 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "game.h"
-
 
 //Read from the file to get the words
 

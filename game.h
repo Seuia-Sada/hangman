@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iostream>
+
 #ifndef GAMER_H
 #define GAMER_H
 
