@@ -5,8 +5,9 @@ int main(void)
     std::srand( std::time( NULL ) );
     Game game;
 
-    while(!game.close( ) == true);
+    do {
         game.play( );
+    } while(!game.close( ) == true);
 
     return EXIT_SUCCESS;
 }
