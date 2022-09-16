@@ -7,7 +7,7 @@ int main(void)
 
     do {
         game.play( );
-    } while(game.close( ) == true);
+    } while(game.close( ));
 
     return EXIT_SUCCESS;
 }

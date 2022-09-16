@@ -26,8 +26,8 @@ private:
     int tries;
     const int length;
 
-    string *wordList;
     string userInput;
+    string *wordList;
 };
 
 #endif
