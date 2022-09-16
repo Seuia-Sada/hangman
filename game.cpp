@@ -107,14 +107,12 @@ bool Game::close( )
 
         if(userInput == "y" || userInput == "yes")
         {
-            break;
-        }
-        else if(userInput == "n" || userInput == "no")
-        {
             tries = 5;
             gameOver = false;
             break;
         }
+        else if(userInput == "n" || userInput == "no")
+            break;
     }
     return !gameOver;
 }
