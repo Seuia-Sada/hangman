@@ -83,7 +83,6 @@ void Game::play( )
             "\nThat words has: " << length << 
             " characters\nYou have: +" << tries << " tries\n"<< 
         endl;
-
         cin >> userInput;
 
         if(misteryWord == userInput)
@@ -112,6 +111,7 @@ bool Game::close( )
         {
             tries = 5;
             gameOver = false;
+            break;
         }
     }
     return gameOver;
