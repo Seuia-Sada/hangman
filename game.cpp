@@ -74,7 +74,7 @@ void Game::play( )
 {
     string misteryWord{ wordList[ 1 + std::rand( ) + length ] };
 
-    while(0 < tries--)
+    while(gameOver == false && 0 < tries--)
     {
         cout << "\033[2J"<<graphic[tries];
 
