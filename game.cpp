@@ -72,7 +72,7 @@ Game::~Game( )
 
 void Game::play( )
 {
-    string misteryWord{ wordList[ 1 + std::rand( ) + length ] };
+    string misteryWord{ wordList[0] };
 
     while(gameOver == false && 0 < tries--)
     {
@@ -80,7 +80,7 @@ void Game::play( )
 
         cout << 
             "\nYou're guessing the word: " << misteryWord << 
-            "\nThat words has: " << length << 
+            "\nThat words has: " << misteryWord.length( ) << 
             " characters\nYou have: +" << tries << " tries\n"<< 
         endl;
         cin >> userInput;
@@ -106,7 +106,9 @@ bool Game::close( )
             userInput[i] = tolower(userInput[i]);
 
         if(userInput == "y" || userInput == "yes")
+        {
             break;
+        }
         else if(userInput == "n" || userInput == "no")
         {
             tries = 5;
@@ -114,6 +116,6 @@ bool Game::close( )
             break;
         }
     }
-    return gameOver;
+    return !gameOver;
 }
     
