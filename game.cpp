@@ -72,11 +72,11 @@ Game::~Game( )
 
 void Game::play( )
 {
-    string &misteryWord{ wordList[ 1 + std::rand( ) + length ] };
+    string &misteryWord{ wordList[ 1 + std::rand( ) % length ] };
 
     while(gameOver == false && 0 < tries)
     {
-        //cout << "\033[2J"<<graphic[tries];
+        cout << "\033[2J"<<graphic[tries];
 
         cout << 
             "\nYou're guessing the word: " << misteryWord << 
@@ -90,30 +90,25 @@ void Game::play( )
             gameOver = true;
             break;
         }
-    }
-}
 
-bool Game::close( )
-{
-    cout << "Do you want to play again? [y/n]\n" << endl;
-
-    while(true)
-    {
-        cin >> userInput;
-        cout << endl;
-
-        for(int i = 0, size = userInput.length( ); i < size; i++)
-            userInput[i] = tolower(userInput[i]);
-
-        if(userInput == "y" || userInput == "yes")
+        while(ganeOver == true)
         {
-            tries = 5;
-            gameOver = false;
-            break;
+            cout << "Do you want to play again? [y/n]\n" << endl;
+            cin >> userInput;
+            cout << endl;
+
+            for(int i = 0, size = userInput.length( ); i < size; i++)
+                userInput[i] = tolower(userInput[i]);
+
+            if(userInput == "y" || userInput == "yes")
+            {
+                tries = 5;
+                gameOver = false;
+                break;
+            }
+            else if(userInput == "n" || userInput == "no")
+                break;
         }
-        else if(userInput == "n" || userInput == "no")
-            break;
     }
-    return !gameOver;
 }
     

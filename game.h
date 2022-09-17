@@ -18,7 +18,6 @@ public:
     Game( int = 99 );
     ~Game( );
     void play( );
-    bool close( );
 private:
     static const char *const graphic[6];
 
