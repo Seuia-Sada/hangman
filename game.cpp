@@ -1,56 +1,58 @@
-#include "game.h"
+#include <cctype>
+#include <fstream>
+#include <iostream>
+using std::cin, std::cout;
+using std::endl;
 
 const char *const Game::graphic[6]
 {
-    {
-        "_______________     \n"
-        "|             |     \n"
-        "|             {}    \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   "
-    }, {
-        "_______________     \n"
-        "|             |     \n"
-        "|            {O}    \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   "
-    }, {
-        "_______________     \n"
-        "|             |     \n"
-        "|            {O}    \n"
-        "|             |     \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   "
-    }, {
-        "_______________     \n"
-        "|             |     \n"
-        "|            {O}    \n"
-        "|            /|\\    \n"
-        "|                   \n"
-        "|                   \n"
-        "|                   "
-    }, {
-        "_______________     \n"
-        "|             |     \n"
-        "|            {O}    \n"
-        "|            /|\\    \n"
-        "|            / \\    \n"
-        "|                   \n"
-        "|                   "
-    }, {
-        "_______________     \n"
-        "|             |     \n"
-        "|            {O}    \n"
-        "|            /|\\    \n"
-        "|            / \\    \n"
-        "|           -----   \n"
-        "|             |     "
-    }
+    "_______________     \n"
+    "|             |     \n"
+    "|             {}    \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   ",
+
+    "_______________     \n"
+    "|             |     \n"
+    "|            {O}    \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   ", 
+
+    "_______________     \n"
+    "|             |     \n"
+    "|            {O}    \n"
+    "|             |     \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   ", 
+
+    "_______________     \n"
+    "|             |     \n"
+    "|            {O}    \n"
+    "|            /|\\    \n"
+    "|                   \n"
+    "|                   \n"
+    "|                   ", 
+
+    "_______________     \n"
+    "|             |     \n"
+    "|            {O}    \n"
+    "|            /|\\    \n"
+    "|            / \\    \n"
+    "|                   \n"
+    "|                   ", 
+
+    "_______________     \n"
+    "|             |     \n"
+    "|            {O}    \n"
+    "|            /|\\    \n"
+    "|            / \\    \n"
+    "|           -----   \n"
+    "|             |     "
 };
 
 Game::Game( int size )
@@ -65,14 +67,12 @@ Game::Game( int size )
         randomWord >> wordList[i];
 }
 
-Game::~Game( )
-{
-    delete[] wordList;
-}
-
 void Game::play( )
 {
     string misteryWord{ wordList[ 1 + std::rand( ) % length ] };
+    char* guessWord{ new char[ wordList.length( ) + 1 ] };
+
+    guessWord[wordList.length( )] = '\0';
 
     while(gameOver == false && 0 < tries)
     {
@@ -81,34 +81,36 @@ void Game::play( )
         cout << 
             "\nYou're guessing the word: " << misteryWord << 
             "\nThat words has: " << misteryWord.length( ) << 
-            " characters\nYou have: +" << tries-- << " tries\n"<< misteryWord << 
+            " characters\nYou have: +" << tries << " tries\n"<< misteryWord << 
         endl;
         cin >> userInput;
-
-        if(misteryWord == userInput)
-        {
-            gameOver = true;
-            break;
-        }
-
-        while(gameOver == true)
-        {
-            cout << "Do you want to play again? [y/n]\n" << endl;
-            cin >> userInput;
-            cout << endl;
-
-            for(int i = 0, size = userInput.length( ); i < size; i++)
-                userInput[i] = tolower(userInput[i]);
-
-            if(userInput == "y")
-            {
-                tries = 5;
-                gameOver = false;
-                break;
-            }
-            else if(userInput == "n")
-                break;
-        }
     }
+}
+
+bool Game::close( )
+{
+    while(gameOver == true)
+    {
+        cout << "Do you want to play again? [y/n]\n" << endl;
+        cin >> userInput;
+        cout << endl;
+
+        userInput[i] = tolower(userInput[i]);
+
+        if(userInput == 'y')
+        {
+            tries = 5;
+            gameOver = false;
+            break;
+        } 
+        else if(userInput == 'n')
+            break;
+    }
+    return !gameOver;
+}
+
+Game::~Game( )
+{
+    delete[] wordList;
 }
     
