@@ -1,116 +1,157 @@
-#include <cctype>
-#include <fstream>
+#include "game.h"
+
 #include <iostream>
-using std::cin, std::cout;
-using std::endl;
+using std::cin, std::cout, std::endl;
 
-const char *const Game::graphic[6]
+#include <fstream>
+#include <iomanip>
+
+hangman::hangman(const string diretory)
+    : GameOver(false), NWord(diretory.length( ))
 {
-    "_______________     \n"
-    "|             |     \n"
-    "|             {}    \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   ",
+    if(NWord == 0) abort( );
 
-    "_______________     \n"
-    "|             |     \n"
-    "|            {O}    \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   ", 
+    std::fstream file;
+    file.open(diretory);
 
-    "_______________     \n"
-    "|             |     \n"
-    "|            {O}    \n"
-    "|             |     \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   ", 
+    WordList = new string[NWord];
 
-    "_______________     \n"
-    "|             |     \n"
-    "|            {O}    \n"
-    "|            /|\\    \n"
-    "|                   \n"
-    "|                   \n"
-    "|                   ", 
-
-    "_______________     \n"
-    "|             |     \n"
-    "|            {O}    \n"
-    "|            /|\\    \n"
-    "|            / \\    \n"
-    "|                   \n"
-    "|                   ", 
-
-    "_______________     \n"
-    "|             |     \n"
-    "|            {O}    \n"
-    "|            /|\\    \n"
-    "|            / \\    \n"
-    "|           -----   \n"
-    "|             |     "
-};
-
-Game::Game( int size )
-    :gameOver( false ), tries( 0 ), length( size ), wordList( nullptr )
-{
-    wordList = new string[length];
-
-    std::ifstream randomWord;
-    randomWord.open("Words.txt");
-
-    for(int i = 0; i < length; i++)
-        randomWord >> wordList[i];
+    for(int i = 0; i < NWord; i++)
+        file >>WordList[i];
 }
 
-void Game::play( )
+hangman::~hangman( )
 {
-    string misteryWord{ wordList[ 1 + std::rand( ) % length ] };
-    char* guessWord{ new char[ wordList.length( ) + 1 ] };
+    delete[] WordList;
+}
 
-    guessWord[wordList.length( )] = '\0';
-
-    while(gameOver == false && 0 < tries)
+bool hangman::close(void)
+{
+    if(GameOver)
     {
-        cout << "\033[2J" << graphic[tries];
-
-        cout << 
-            "\nYou're guessing the word: " << misteryWord << 
-            "\nThat words has: " << misteryWord.length( ) << 
-            " characters\nYou have: +" << tries << " tries\n"<< misteryWord << 
+        cout
+            << std::setw(5)<< "\nYou "<< ( GameOver == true && tries < 6 ? "Win" : "Lost" )
+            << "!\nWhat to play again?\n[y/n]"<< 
         endl;
-        cin >> userInput;
-    }
-}
 
-bool Game::close( )
-{
-    while(gameOver == true)
-    {
-        cout << "Do you want to play again? [y/n]\n" << endl;
-        cin >> userInput;
-        cout << endl;
-
-        userInput[i] = tolower(userInput[i]);
-
-        if(userInput == 'y')
+        while(Input != 'y' && Input != 'n')
         {
-            tries = 5;
-            gameOver = false;
-            break;
-        } 
-        else if(userInput == 'n')
-            break;
+            cin >>Input;
+            tolower(Input);
+            cout<< '\b';
+        }
+
+        if(Input == 'y') GameOver = false;
     }
-    return !gameOver;
+
+    return GameOver;
 }
 
-Game::~Game( )
+// Gera saida
+void hangman::screen(const string &word) const
 {
-    delete[] wordList;
+    cout
+        << "Search: "<< std::left<< std::setw( word.length( ) + 3 )<< word
+        << "Tries: "<< tries<< '\n'<< graphic[tries]<< '\n'<< 
+    endl;
 }
+
+void hangman::play(void)
+{
+    // pega uma palavra aleatória carregada no ponteiro WordList
+    const string guessWord( WordList[ 1 + std::rand( ) % NWord ] );
+    string search( guessWord ); // copia a string
+
+    const size_t length{ guessWord.length( ) };
+    tries = 0;
+
+    // seta todos os caracteres menos o de terminação nulo como espaço
+    for(int i = 0; i < length; i++)
+        search[i] = '_';
+
+    while(GameOver != true)
+    {
+        system("cls"); // limpa a tela em systemas opearcionais Windows
+        screen(search);
+
+        cin >>Input;
+        tolower(Input);
+
+        for(int changes = 0, i = 0; i < length + 1; i++)
+        {
+            /* */if(Input == guessWord[i]) 
+            {
+                search[i] = Input;
+                ++changes;
+            }
+            else if(changes == 0 && guessWord[i] == '\0')
+                ++tries;
+        }
+
+        if(search == guessWord || tries == 6 )
+        {
+            screen(guessWord);
+            GameOver = true;
+        }
+    }
+}
+
+const string hangman::graphic[7]
+{
+    "_________  \n"
+    "|      I   \n"
+    "|          \n"
+    "|          \n"
+    "|          \n"
+    "|    ----- \n"
+    "|     | |  ", 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|          \n"
+    "|          \n"
+    "|    ----- \n"
+    "|     | |  ", 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|      |   \n"
+    "|          \n"
+    "|    ----- \n"
+    "|     | |  ", 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|     /|   \n"
+    "|          \n"
+    "|    ----- \n"
+    "|     | |  ", 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|     /|\\  \n"
+    "|          \n"
+    "|    ----- \n"
+    "|     | |  ", 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|     /|\\  \n"
+    "|     /    \n"
+    "|    ----- \n"
+    "|     | |  " , 
+
+    "_________  \n"
+    "|      I   \n"
+    "|      O   \n"
+    "|     /|\\  \n"
+    "|     / \\  \n"
+    "|    ----- \n"
+    "|     | |  "
+};
     

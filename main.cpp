@@ -1,13 +1,13 @@
 #include "game.h"
 
-int main(void)
+int main( )
 {
-    std::srand( std::time( NULL ) );
-    Game game;
+    std::srand( std::time(NULL) );
+    hangman game("Words.txt");
 
-    while(game.close( ))
+    while(!game.close( ))
         game.play( );
 
-    return EXIT_SUCCESS;
+    return 0;
 }
     

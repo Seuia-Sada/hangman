@@ -4,25 +4,28 @@
 #include <ctime>
 #include <string>
 using std::string;
-#include <cstdlib>
 
-class Game
+struct hangman 
 {
 public:
-    Game( int = 99 );
-    void play( );
-    bool close( );
-    ~Game( );
+    // construtor padrão que recebe uma string informando o nome do arquivo / diretório
+    hangman( const string diretory = "" );
+   ~hangman( );
+
+    bool close( void );
+    void play  ( void );
 private:
-    static const char *const graphic[6];
-    char userInput;
+    void screen( const string& ) const;
 
-    bool gameOver;
+    bool GameOver;
+    char Input;
 
+    const int NWord;
     int tries;
-    const int length;
 
-    string *wordList;
+    // string que será carregada com palavras
+    string *WordList;
+    const static string graphic[7];
 };
 
 #endif
